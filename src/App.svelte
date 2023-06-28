@@ -54,19 +54,8 @@
 	}
   </script>
 
-<main>
-	<div class="top-right">
-	  <div class="toggle-switch">
-		<label>
-		  <input type="checkbox" bind:checked={developerMode} />
-		  Developer Mode
-		</label>
-	  </div>
-	  {#if developerMode}
-		<button on:click={saveChanges}>Save</button>
-	  {/if}
-	</div>
 
+<main>
 	<div class="system-context-view">
 	  {#each apps as app}
 		{#if !developerMode && app.category !== 'Testing'}
@@ -79,6 +68,13 @@
 			<div class="app-name">{app.name}</div>
 			{#if selectedApp === app}
 			  <div class="app-description">{app.description}</div>
+			  <div class="container-view">
+				{#each app.containers as container}
+				  <div class="container-box" style="background-color: {app.color}">
+					<h3>{container}</h3>
+				  </div>
+				{/each}
+			  </div>
 			{/if}
 		  </div>
 		{/if}
@@ -92,30 +88,39 @@
 			<div class="app-name">{app.name}</div>
 			{#if selectedApp === app}
 			  <div class="app-description">{app.description}</div>
+			  <div class="container-view">
+				{#each app.containers as container}
+				  <div class="container-box" style="background-color: {app.color}">
+					<h3>{container}</h3>
+				  </div>
+				{/each}
+			  </div>
 			{/if}
 		  </div>
 		{/if}
 	  {/each}
 	</div>
 
-	{#if selectedApp}
-	  <div class="system-app-box" style="background-color: {selectedApp.color}">
-		<h2>{selectedApp.name}</h2>
-		<p>{selectedApp.description}</p>
-		<div class="container-view">
-		  {#each containers as container}
-			<div class="container-box" style="background-color: {selectedApp.color}">
-			  <h3>{container}</h3>
-			</div>
-		  {/each}
-		</div>
-	  </div>
+	<div class="toggle-switch">
+	  <label>
+		<input type="checkbox" bind:checked={developerMode} />
+		Developer Mode
+	  </label>
+	</div>
+	{#if developerMode}
+	  <button on:click={saveChanges}>Save</button>
 	{/if}
   </main>
 
 
   <style>
-main {
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.main-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -123,23 +128,11 @@ main {
   height: 100vh;
 }
 
-.top-right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 10px;
-  gap: 10px;
-}
-
-.toggle-switch {
-  display: flex;
-  align-items: center;
-}
-
 .system-context-view {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  justify-content: center;
 }
 
 .app-box {
@@ -180,28 +173,24 @@ main {
 }
 
 .system-app-box {
-	padding: 20px;
-	border-radius: 10px;
-	margin-bottom: 20px;
-	transition: height 0.3s;
-	overflow: hidden;
-  }
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+transition: height 0.3s;
+overflow: hidden;
+}
 
-  .container-view {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	margin-top: 10px;
-  }
+.container-view {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-top: 10px;
+}
 
-  .container-box {
-	padding: 10px;
-	border-radius: 10px;
-	background-color: white;
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  }
-
-  .container-box:hover {
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
-  }
+.container-box {
+padding: 10px;
+border-radius: 10px;
+background-color: white;
+box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
   </style>
