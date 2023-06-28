@@ -1,7 +1,6 @@
 <script>
-	let developerMode; // Property to store the developer mode toggle value
+	let developerMode;
 
-	// Sample data for apps and containers
 	let apps = [
 	  { name: 'App 1', alias: 'A1', description: 'Description of App 1', color: 'red', category: 'API' },
 	  { name: 'App 2', alias: 'A2', description: 'Description of App 2', color: 'blue', category: 'Frontend' },
@@ -13,45 +12,45 @@
 
 	function selectApp(app) {
 	  if (selectedApp === app) {
-		// If the same app is clicked again, deselect it
 		selectedApp = null;
 	  } else {
 		selectedApp = app;
-		// Fetch containers for the selected app from the backend
-		// and update the 'containers' array accordingly
 	  }
 	}
 
 	function saveChanges() {
-	  // Send the updated app, containers, and connections data to the backend
-	  // to be saved in the private GitHub repository using the token from .env
 	}
   </script>
+
 
 
 <main>
 	<div class="system-context-view">
 	  {#each apps as app}
 		{#if !developerMode && app.category !== 'Testing'}
-		  <!-- Skip rendering if not in developer mode and app category is not 'Testing' -->
 		  <div
 			class="app-box"
 			style="background-color: {app.color}"
 			class:selected={selectedApp === app}
 			on:click={() => selectApp(app)}
 		  >
-			<div>{app.name}</div>
+			<div class="app-name">{app.name}</div>
+			{#if selectedApp === app}
+			  <div class="app-description">{app.description}</div>
+			{/if}
 		  </div>
 		{/if}
 		{#if developerMode}
-		  <!-- Render all apps in developer mode -->
 		  <div
 			class="app-box"
 			style="background-color: {app.color}"
 			class:selected={selectedApp === app}
 			on:click={() => selectApp(app)}
 		  >
-			<div>{app.name}</div>
+			<div class="app-name">{app.name}</div>
+			{#if selectedApp === app}
+			  <div class="app-description">{app.description}</div>
+			{/if}
 		  </div>
 		{/if}
 	  {/each}
@@ -67,7 +66,6 @@
 		{#each containers as container}
 		  <div class="container-box" style="background-color: {container.color}">
 			<h3>{container.name}</h3>
-			<!-- Render connections for this container -->
 		  </div>
 		{/each}
 	  </div>
@@ -82,33 +80,56 @@
 
 	<button on:click={saveChanges}>Save</button>
   </main>
+
+
   <style>
-	/* CSS styles for the dashboard layout */
-
 	.system-context-view {
-	  display: flex;
-	  flex-wrap: wrap;
-	  gap: 10px;
-	}
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-	.app-box {
-	  padding: 10px;
-	  border-radius: 10px;
-	  cursor: pointer;
-	}
+.app-box {
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
 
-	.system-app-box {
-	  padding: 20px;
-	  border-radius: 10px;
-	  margin-bottom: 20px;
-	}
+.app-name {
+  font-weight: bold;
+}
 
-	.container-box {
-	  padding: 10px;
-	  border-radius: 10px;
-	  margin-bottom: 10px;
-	}
+.app-description {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
 
-	/* Additional styles for colors and other elements */
-	/* ... */
+.app-box:hover .app-description {
+  opacity: 1;
+  visibility: visible;
+}
+
+.system-app-box {
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.container-box {
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
   </style>
