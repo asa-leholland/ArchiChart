@@ -2,9 +2,38 @@
 	let developerMode;
 
 	let apps = [
-	  { name: 'App 1', alias: 'A1', description: 'Description of App 1', color: 'red', category: 'API' },
-	  { name: 'App 2', alias: 'A2', description: 'Description of App 2', color: 'blue', category: 'Frontend' },
-	  { name: 'App 3', alias: 'A3', description: 'Description of App 3', color: 'green', category: 'Database' },
+	  {
+		name: 'App 1',
+		alias: 'A1',
+		description: 'Description of App 1',
+		color: 'red',
+		category: 'Production',
+		containers: ['API', 'Admin'],
+	  },
+	  {
+		name: 'App 2',
+		alias: 'A2',
+		description: 'Description of App 2',
+		color: 'blue',
+		category: 'Production',
+		containers: ['Frontend', 'Admin'],
+	  },
+	  {
+		name: 'App 3',
+		alias: 'A3',
+		description: 'Description of App 3',
+		color: 'green',
+		category: 'Production',
+		containers: ['Database', 'Admin'],
+	  },
+	  {
+		name: 'App 3 Testing',
+		alias: 'A3',
+		description: 'Description of App 3',
+		color: 'green',
+		category: 'Testing',
+		containers: ['Database', 'Admin'],
+	  },
 	];
 
 	let selectedApp = null;
@@ -15,16 +44,17 @@
 		selectedApp = null;
 	  } else {
 		selectedApp = app;
+		containers = app.containers;
 	  }
 	}
 
 	function saveChanges() {
+	  // Send the updated app, containers, and connections data to the backend
+	  // to be saved in the private GitHub repository using the token from .env
 	}
   </script>
 
-
-
-<main>
+  <main>
 	<div class="system-context-view">
 	  {#each apps as app}
 		{#if !developerMode && app.category !== 'Testing'}
@@ -57,17 +87,16 @@
 	</div>
 
 	{#if selectedApp}
-	  <div class="container-view">
-		<div class="system-app-box" style="background-color: {selectedApp.color}">
-		  <h2>{selectedApp.name}</h2>
-		  <p>{selectedApp.description}</p>
+	  <div class="system-app-box" style="background-color: {selectedApp.color}">
+		<h2>{selectedApp.name}</h2>
+		<p>{selectedApp.description}</p>
+		<div class="container-view">
+		  {#each containers as container}
+			<div class="container-box" style="background-color: {selectedApp.color}">
+			  <h3>{container}</h3>
+			</div>
+		  {/each}
 		</div>
-
-		{#each containers as container}
-		  <div class="container-box" style="background-color: {container.color}">
-			<h3>{container.name}</h3>
-		  </div>
-		{/each}
 	  </div>
 	{/if}
 
@@ -77,23 +106,31 @@
 		Developer Mode
 	  </label>
 	</div>
-
+	{#if developerMode}
 	<button on:click={saveChanges}>Save</button>
+	{/if}
   </main>
 
-
   <style>
+	/* CSS styles for the dashboard layout */
+
 	.system-context-view {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap: 10px;
+	}
+
+	.app-box {
+	  padding: 10px;
+	  border-radius: 10px;
+	  cursor: pointer;
+	  position: relative;
+  transform-origin: top;
+  transition: transform 0.3s;
 }
 
-.app-box {
-  padding: 10px;
-  border-radius: 10px;
-  cursor: pointer;
-  position: relative;
+.app-box[selected] {
+  transform: scaleY(1.1);
 }
 
 .app-name {
@@ -124,12 +161,21 @@
   padding: 20px;
   border-radius: 10px;
   margin-bottom: 20px;
+  transition: height 0.3s;
+  overflow: hidden;
+}
+
+.container-view {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .container-box {
   padding: 10px;
   border-radius: 10px;
-  margin-bottom: 10px;
+  background-color: white;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
-
-  </style>
+</style>
