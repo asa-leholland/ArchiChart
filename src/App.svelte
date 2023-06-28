@@ -54,7 +54,19 @@
 	}
   </script>
 
-  <main>
+<main>
+	<div class="top-right">
+	  <div class="toggle-switch">
+		<label>
+		  <input type="checkbox" bind:checked={developerMode} />
+		  Developer Mode
+		</label>
+	  </div>
+	  {#if developerMode}
+		<button on:click={saveChanges}>Save</button>
+	  {/if}
+	</div>
+
 	<div class="system-context-view">
 	  {#each apps as app}
 		{#if !developerMode && app.category !== 'Testing'}
@@ -99,32 +111,42 @@
 		</div>
 	  </div>
 	{/if}
-
-	<div class="toggle-switch">
-	  <label>
-		<input type="checkbox" bind:checked={developerMode} />
-		Developer Mode
-	  </label>
-	</div>
-	{#if developerMode}
-	<button on:click={saveChanges}>Save</button>
-	{/if}
   </main>
 
+
   <style>
-	/* CSS styles for the dashboard layout */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
 
-	.system-context-view {
-	  display: flex;
-	  flex-wrap: wrap;
-	  gap: 10px;
-	}
+.top-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+}
 
-	.app-box {
-	  padding: 10px;
-	  border-radius: 10px;
-	  cursor: pointer;
-	  position: relative;
+.toggle-switch {
+  display: flex;
+  align-items: center;
+}
+
+.system-context-view {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.app-box {
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
   transform-origin: top;
   transition: transform 0.3s;
 }
@@ -158,24 +180,28 @@
 }
 
 .system-app-box {
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  transition: height 0.3s;
-  overflow: hidden;
-}
+	padding: 20px;
+	border-radius: 10px;
+	margin-bottom: 20px;
+	transition: height 0.3s;
+	overflow: hidden;
+  }
 
-.container-view {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-}
+  .container-view {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 10px;
+  }
 
-.container-box {
-  padding: 10px;
-  border-radius: 10px;
-  background-color: white;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-}
-</style>
+  .container-box {
+	padding: 10px;
+	border-radius: 10px;
+	background-color: white;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .container-box:hover {
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+  }
+  </style>
